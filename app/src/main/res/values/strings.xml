@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">TI_Sensor(九軸)</string>
+    <!--DeviceScanActivity.java-->
+    <string name="title_devices">BLE Device Scan</string>
+    <string name="ble_not_supported">BLE is not supported</string>
+    <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+    <string name="error_ACCESS_COARSE_LOCATION">藍芽需要位置定位權限</string>
+    <string name="unknown_device">Unknown device</string>
+    <!--activity_device_scan.xml-->
+    <string name="unconn_device">Unconnected Device Lists</string>
+    <!--actionbar_device_scan.xml-->
+    <string name="menu_scan">Scan</string>
+    <string name="menu_stop">Stop</string>
+    <!--activity_device_control.xml-->
+    <string name="label_device_name">Device name:</string>
+    <string name="label_device_address">Device address:</string>
+    <string name="label_device_status">Device status:</string>
+    <string name="no_data">No data</string>
+    <string name="aX_value">acc_x:</string>
+    <string name="aY_value">acc_y:</string>
+    <string name="aZ_value">acc_z:</string>
+    <string name="gX_value">gyro_x:</string>
+    <string name="gY_value">gyro_y:</string>
+    <string name="gZ_value">gyro_z:</string>
+    <string name="mX_value">com_x:</string>
+    <string name="mY_value">com_y:</string>
+    <string name="mZ_value">com_z:</string>
+    <string name="emBit_value">緊急bit:</string>
+    <string name="power_value">電量:</string>
+    <string name="accScale_value">加速度解析度:</string>
+    <string name="firstConn_value">第一次連線時間:</string>
+    <string name="getReadTime_value">收到資料時間:</string>
+    <string name="time_ms">ms</string>
+    <string name="sendReadPeriod">發送讀取間隔:</string>
+    <string name="sendReadCount_value">發送讀取次數:</string>
+    <string name="getReadCount_value">收到資料次數:</string>
+    <string name="appFinish">程式結束</string>
+    <!--DeviceControlActivity.java-->
+    <string name="connecting">連接中</string>
+    <string name="connect">已連接</string>
+    <string name="disconnect">已斷線</string>
+    <string name="sensor_configuration">設置感應器中</string>
+    <string name="reading">讀取數據</string>
+</resources>

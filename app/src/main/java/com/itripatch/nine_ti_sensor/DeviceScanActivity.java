@@ -90,6 +90,10 @@ public class DeviceScanActivity extends AppCompatActivity {
                 mStringList.add(Manifest.permission.ACCESS_COARSE_LOCATION);
             }
 
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                mStringList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+
             if (mStringList.size() != 0) {
                 String[] mStringArray = new String[mStringList.size()];
                 mStringArray = mStringList.toArray(mStringArray);

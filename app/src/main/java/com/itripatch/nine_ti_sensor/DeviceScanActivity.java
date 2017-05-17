@@ -189,7 +189,7 @@ public class DeviceScanActivity extends AppCompatActivity {
                     message.putString("sendReadPeriod", ((EditText) findViewById(R.id.sendReadPeriod_value)).getText().toString());                    ;
                     intent.putExtras(message);
                     startActivityForResult(intent, REQUEST_START_BLE);
-                } else if (device.getName().contains("itri patch 2.0")) {
+                } else if (device.getName().contains("itri patch")) {
 
                     if (mScanning) {
                         mBluetoothAdapter.stopLeScan(mLeScanCallback);

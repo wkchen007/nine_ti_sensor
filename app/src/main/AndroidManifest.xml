@@ -15,7 +15,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="com.itripatch.nine_ti_sensor.DeviceScanActivity"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

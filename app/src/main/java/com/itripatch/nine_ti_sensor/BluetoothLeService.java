@@ -61,6 +61,8 @@ public class BluetoothLeService extends Service {
     private Date[] mGetReadTime = new Date[BLE_TOTAL];
     private int[] mSendReadCount = new int[BLE_TOTAL];
     private int[] mGetReadCount = new int[BLE_TOTAL];
+    private int[] mGetRssi = new int[BLE_TOTAL];
+    private int RSSI;
     private BluetoothGatt[] mBluetoothGatt = new BluetoothGatt[BLE_TOTAL];
     private int[] mConnectionState = new int[BLE_TOTAL];
     private BluetoothGattCallback[] mGattCallback = new BluetoothGattCallback[BLE_TOTAL];
@@ -150,8 +152,6 @@ public class BluetoothLeService extends Service {
                     // Attempts to discover services after successful connection.
                     Log.i(TAG, "Attempting to start service discovery:" +
                             mBluetoothGatt[index].discoverServices());
-                    //CH Add - Get RSSI value
-//                    mBluetoothGatt[index].readRemoteRssi();   //啟動BLE開始一直送RSSI
                     Log.i("KKK", BODY[index] + ACTION_GATT_CONNECTED + " " + mBluetoothDeviceAddress[index]);
 
                 } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
@@ -169,6 +169,9 @@ public class BluetoothLeService extends Service {
                                              int status) {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     final byte[] data = characteristic.getValue();
+                    //CH Add - Get RSSI value
+                    mBluetoothGatt[index].readRemoteRssi();   //啟動BLE開始一直送RSSI
+                    mGetRssi[index] = RSSI;
                     Log.i("KKK", BODY[index] + RECEIVE_DATA_IDENTIFIER + " Y " + mBluetoothDeviceAddress[index] + " " + Arrays.toString(data));
 //                    Log.i("KKK", "RECEIVE_DATA " + Arrays.toString(data));
                     mGetReadCount[index]++;
@@ -206,6 +209,11 @@ public class BluetoothLeService extends Service {
                 }
             }
 
+            @Override
+            public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
+                Log.i("TTT", "onReadRemoteRssi: " + rssi);
+                RSSI =rssi;
+            }
         };
     }
 

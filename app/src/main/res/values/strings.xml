@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TI_Sensor(九軸)</string>
+    <string name="app_name">ITRI_Sensor</string>
     <!--DeviceScanActivity.java-->
     <string name="title_devices">BLE Device Scan</string>
     <string name="ble_not_supported">BLE is not supported</string>
@@ -28,12 +28,14 @@
     <string name="emBit_value">緊急bit:</string>
     <string name="power_value">電量:</string>
     <string name="accScale_value">加速度解析度:</string>
+    <string name="rssi_value">RSSI:</string>
     <string name="firstConn_value">第一次連線時間:</string>
     <string name="getReadTime_value">收到資料時間:</string>
     <string name="time_ms">ms</string>
     <string name="sendReadPeriod">發送讀取間隔:</string>
     <string name="sendReadCount_value">發送讀取次數:</string>
     <string name="getReadCount_value">收到資料次數:</string>
+    <string name="lossRate_value">封包遺失率:</string>
     <string name="appFinish">程式結束</string>
     <!--DeviceControlActivity.java-->
     <string name="connecting">連接中</string>

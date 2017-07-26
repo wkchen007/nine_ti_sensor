@@ -43,7 +43,7 @@ public class DeviceControlActivity extends AppCompatActivity {
 
     private TextView device_name, device_address, device_status;
     private TextView[] show_aXYZ = new TextView[3], show_gXYZ = new TextView[3], show_mXYZ = new TextView[3];
-    private TextView show_emBit, show_power, show_accScale, show_firstConn, show_sendReadCount, show_getReadCount, show_getReadTime, show_sendReadPeriod;
+    private TextView show_emBit, show_power, show_accScale, show_firstConn, show_sendReadCount, show_getReadCount, show_getReadTime, show_sendReadPeriod, show_RSSI, show_lossRate;
     private Button appFinish;
 
     private ArrayList<String> xyzString;
@@ -80,13 +80,14 @@ public class DeviceControlActivity extends AppCompatActivity {
         show_emBit = (TextView) findViewById(R.id.emBit_value);
         show_power = (TextView) findViewById(R.id.power_value);
         show_accScale = (TextView) findViewById(R.id.accScale_value);
+        show_RSSI = (TextView) findViewById(R.id.rssi_value);
         show_firstConn = (TextView) findViewById(R.id.firstConn_value);
         show_sendReadCount = (TextView) findViewById(R.id.sendReadCount_value);
         show_getReadCount = (TextView) findViewById(R.id.getReadCount_value);
         show_getReadTime = (TextView) findViewById(R.id.getReadTime_value);
         show_sendReadPeriod = (TextView) findViewById(R.id.sendReadPeriod_value);
         show_sendReadPeriod.setText(mSendReadPeriod + " ms");
-
+        show_lossRate = (TextView) findViewById(R.id.lossRate_value);
         appFinish = (Button) findViewById(R.id.appFinish);
         appFinish.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -151,7 +152,7 @@ public class DeviceControlActivity extends AppCompatActivity {
                 float show_a_x, show_a_y, show_a_z, show_a_xyz;
                 int scale = 16384; //2G:16384 4G:8192 8G:4096
                 String temp = "";
-                temp += Long.toString(System.currentTimeMillis()) + ",";
+                temp += cutString[10] + ",";
                 a_x = Float.valueOf(cutString[3]) / scale;show_a_x = (float) ((int) Math.floor(a_x * 10000) / 10000.0);temp += show_a_x + ",";
                 a_y = Float.valueOf(cutString[4]) / scale;show_a_y = (float) ((int) Math.floor(a_y * 10000) / 10000.0);temp += show_a_y + ",";
                 a_z = Float.valueOf(cutString[5]) / scale;show_a_z = (float) ((int) Math.floor(a_z * 10000) / 10000.0);temp += show_a_z + ",";
@@ -177,14 +178,16 @@ public class DeviceControlActivity extends AppCompatActivity {
                 int mscale = 4096;
                 m_x = (Float.valueOf(cutString[6]) * 2400) / mscale;show_m_x = (float) ((int) Math.floor(m_x * 10000) / 10000.0);temp += show_m_x + ",";
                 m_y = (Float.valueOf(cutString[7]) * 2400) / mscale;show_m_y = (float) ((int) Math.floor(m_y * 10000) / 10000.0);temp += show_m_y + ",";
-                m_z = (Float.valueOf(cutString[8]) * 2400) / mscale;show_m_z = (float) ((int) Math.floor(m_z * 10000) / 10000.0);temp += show_m_z;
+                m_z = (Float.valueOf(cutString[8]) * 2400) / mscale;show_m_z = (float) ((int) Math.floor(m_z * 10000) / 10000.0);temp += show_m_z + ",";
                 show_mXYZ[0].setText(String.valueOf(show_m_x));
                 show_mXYZ[1].setText(String.valueOf(show_m_y));
                 show_mXYZ[2].setText(String.valueOf(show_m_z));
                 
                 show_getReadCount.setText(cutString[9]);
                 show_getReadTime.setText(cutString[10]);
-
+                show_RSSI.setText(cutString[11] + " db");temp += cutString[11] + ",";
+                temp += cutString[12] + ",";
+                show_lossRate.setText(cutString[13]);temp += cutString[13];
                 xyzString.add(temp);
                 break;
             }
@@ -195,7 +198,7 @@ public class DeviceControlActivity extends AppCompatActivity {
                 float show_a_x, show_a_y, show_a_z, show_a_xyz;
                 int scale = 16384; //2G:16384 4G:8192 8G:4096
                 String temp = "";
-                temp += Long.toString(System.currentTimeMillis()) + ",";
+                temp += cutString[13] + ",";
                 a_x = Float.valueOf(cutString[3]) / scale;show_a_x = (float) ((int) Math.floor(a_x * 10000) / 10000.0);temp += show_a_x + ",";
                 a_y = Float.valueOf(cutString[4]) / scale;show_a_y = (float) ((int) Math.floor(a_y * 10000) / 10000.0);temp += show_a_y + ",";
                 a_z = Float.valueOf(cutString[5]) / scale;show_a_z = (float) ((int) Math.floor(a_z * 10000) / 10000.0);temp += show_a_z + ",";
@@ -221,7 +224,7 @@ public class DeviceControlActivity extends AppCompatActivity {
                 int mscale = 4096;
                 m_x = (Float.valueOf(cutString[6]) * 2400) / mscale;show_m_x = (float) ((int) Math.floor(m_x * 10000) / 10000.0);temp += show_m_x + ",";
                 m_y = (Float.valueOf(cutString[7]) * 2400) / mscale;show_m_y = (float) ((int) Math.floor(m_y * 10000) / 10000.0);temp += show_m_y + ",";
-                m_z = (Float.valueOf(cutString[8]) * 2400) / mscale;show_m_z = (float) ((int) Math.floor(m_z * 10000) / 10000.0);temp += show_m_z;
+                m_z = (Float.valueOf(cutString[8]) * 2400) / mscale;show_m_z = (float) ((int) Math.floor(m_z * 10000) / 10000.0);temp += show_m_z + ",";
                 show_mXYZ[0].setText(String.valueOf(show_m_x));
                 show_mXYZ[1].setText(String.valueOf(show_m_y));
                 show_mXYZ[2].setText(String.valueOf(show_m_z));
@@ -231,7 +234,9 @@ public class DeviceControlActivity extends AppCompatActivity {
                 show_accScale.setText(cutString[11]);
                 show_getReadCount.setText(cutString[12]);
                 show_getReadTime.setText(cutString[13]);
-
+                show_RSSI.setText(cutString[14] + " db");temp += cutString[14] + ",";
+                temp += cutString[15] + ",";
+                show_lossRate.setText(cutString[16]);temp += cutString[16];
                 xyzString.add(temp);
                 break;
             }
@@ -290,7 +295,6 @@ public class DeviceControlActivity extends AppCompatActivity {
             } else if ((pBody + RECEIVE_DATA_IDENTIFIER).equals(action)) {
                 device_status.setText(R.string.reading);
                 Bundle rawDataBundle = intent.getExtras();
-
                 switch (mDeviceType) {
                     case "TI":
                         bodyAction("readTI", FIRST, rawDataBundle.getString(pBody + RECEIVE_DATA_IDENTIFIER));
@@ -299,7 +303,6 @@ public class DeviceControlActivity extends AppCompatActivity {
                         bodyAction("readITRI", FIRST, rawDataBundle.getString(pBody + RECEIVE_DATA_IDENTIFIER));
                         break;
                 }
-
             } else if ((pBody + RECEIVE_DATA_SETTING_IDENTIFIER).equals(action)) {
                 Bundle rawDataBundle = intent.getExtras();
                 Toast.makeText(getApplicationContext(), "DATA_SETTING:" + rawDataBundle.getString(pBody + RECEIVE_DATA_SETTING_IDENTIFIER), Toast.LENGTH_SHORT).show();
@@ -312,10 +315,8 @@ public class DeviceControlActivity extends AppCompatActivity {
     };
 
     public String getDateTime(int timeFormat) {
-
         Date dateNow = new Date();
         SimpleDateFormat formatter = null;
-
         switch (timeFormat) {
 
             case 0: //格式 :20xx - xx - xx  xx : xx : xx
@@ -343,19 +344,22 @@ public class DeviceControlActivity extends AppCompatActivity {
         File dir = new File(Environment.getExternalStorageDirectory().getPath() + "/Log");
         // ----如要在SD卡中建立數據庫文件，先做如下的判斷和建立相對應的目錄和文件----
         if (!dir.exists()) { // 判斷目錄是否存在
-
             dir.mkdirs(); // 建立目錄
         } else {
-
         }
-
         try {
             File myFile = new File(Environment.getExternalStorageDirectory().getPath() + "/Log/" + getDateTime(1) + ".csv");
 
             myFile.createNewFile();
             FileOutputStream fOut = new FileOutputStream(myFile);
             OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut, "UTF-8");
-
+            myOutWriter.write("address: " + mDeviceAddress + "," + "sendReadPeriod (ms): " + mSendReadPeriod + "," + "firstConn: " + show_firstConn.getText() + "\n");
+            switch (mDeviceType){
+                case "TI":
+                case "ITRI":
+                    myOutWriter.write("time,a_x,a_y,a_z,a_xyz,g_x,g_y,g_z,m_x,m_y,m_z,rssi (db),sendCount,lossRate" + "\n");
+                    break;
+            }
             int i;
             for (i = 0; i < numbers.size(); i++) {
 

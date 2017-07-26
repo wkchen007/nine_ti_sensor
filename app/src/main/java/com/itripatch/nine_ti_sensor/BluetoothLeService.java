@@ -147,7 +147,7 @@ public class BluetoothLeService extends Service {
                     intentAction = BODY[index] + ACTION_GATT_CONNECTED;
                     mConnectionState[index] = STATE_CONNECTED;
                     mFirstConnectTime[index] = new Date(System.currentTimeMillis());
-                    broadcastUpdate(intentAction, new SimpleDateFormat("HH:mm:ss").format(mFirstConnectTime[index]));
+                    broadcastUpdate(intentAction, new SimpleDateFormat("HH:mm:ss.SSS").format(mFirstConnectTime[index]));
                     Log.i(TAG, "Connected to GATT server.");
                     // Attempts to discover services after successful connection.
                     Log.i(TAG, "Attempting to start service discovery:" +
@@ -173,12 +173,9 @@ public class BluetoothLeService extends Service {
                     mBluetoothGatt[index].readRemoteRssi();   //啟動BLE開始一直送RSSI
                     mGetRssi[index] = RSSI;
                     Log.i("KKK", BODY[index] + RECEIVE_DATA_IDENTIFIER + " Y " + mBluetoothDeviceAddress[index] + " " + Arrays.toString(data));
-//                    Log.i("KKK", "RECEIVE_DATA " + Arrays.toString(data));
                     mGetReadCount[index]++;
                     mGetReadTime[index] = new Date(System.currentTimeMillis());
                     broadcastUpdate(index, BODY[index] + RECEIVE_DATA_IDENTIFIER, characteristic);
-                } else {
-                    Log.i("KKK", BODY[index] + RECEIVE_DATA_IDENTIFIER + " N " + mBluetoothDeviceAddress[index]);
                 }
             }
 
@@ -203,16 +200,12 @@ public class BluetoothLeService extends Service {
                     }
                     broadcastUpdate(BODY[index] + ACTION_GATT_SERVICES_DISCOVERED, null);
                     Log.i("KKK", BODY[index] + ACTION_GATT_SERVICES_DISCOVERED + " Y " + mBluetoothDeviceAddress[index]);
-                } else {
-                    Log.w(TAG, "onServicesDiscovered received: " + status);
-                    Log.i("KKK", BODY[index] + ACTION_GATT_SERVICES_DISCOVERED + " N " + mBluetoothDeviceAddress[index]);
                 }
             }
 
             @Override
             public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
-                Log.i("TTT", "onReadRemoteRssi: " + rssi);
-                RSSI =rssi;
+                RSSI = rssi;
             }
         };
     }
@@ -239,13 +232,9 @@ public class BluetoothLeService extends Service {
             String tempString = "";
 
             for (i = 0; i < data.length; i++) {
-
                 Byte b = new Byte(data[i]);
                 int xxx = b.intValue();
-
-//                String hex_value =  String.format("%.2s", Integer.toHexString(xxx));
                 String hex_value = Integer.toHexString(xxx);
-
                 switch (hex_value.length()) {
                     case 1:
                         hex_value = "0" + hex_value;
@@ -254,29 +243,20 @@ public class BluetoothLeService extends Service {
                         hex_value = hex_value.substring(6, 8);
                         break;
                 }
-
                 if ((i % 2) == 0) {
-
                     tempString = tempString + hex_value;
                 } else {
-
                     if (i == data.length - 1) {
-
                         tempString = hex_value + tempString;
                     } else {
-
                         tempString = hex_value + tempString + ",";
                     }
                     hexString = hexString + tempString;
                     tempString = "";
-
-
                 }
-
             }
 
             if (data != null && data.length > 0) {
-
                 dataParseTI(index, action, hexString);
             }
         }
@@ -287,13 +267,9 @@ public class BluetoothLeService extends Service {
             String hexString = "";
             String tempString = "";
             for (i = 0; i < data.length - 3; i++) {
-
                 Byte b = new Byte(data[i]);
                 int xxx = b.intValue();
-
-//                    String hex_value = String.format("%.2s", Integer.toHexString(xxx));
                 String hex_value = Integer.toHexString(xxx);
-
                 switch (hex_value.length()) {
                     case 1:
                         hex_value = "0" + hex_value;
@@ -302,29 +278,19 @@ public class BluetoothLeService extends Service {
                         hex_value = hex_value.substring(6, 8);
                         break;
                 }
-
                 if ((i % 2) == 0) {
-
                     tempString = tempString + hex_value;
                 } else {
-
                     if (i == data.length - 1) {
-
                         tempString = hex_value + tempString;
                     } else {
-
                         tempString = hex_value + tempString + ",";
                     }
                     hexString = hexString + tempString;
                     tempString = "";
-
-
                 }
-
             }
-
             if (data != null && data.length > 0) {
-
                 dataParseITRI(index, action, hexString.substring(0, hexString.length() - 1), data[18] + "", data[19] + "", data[20] + "");
             }
         }
@@ -332,86 +298,50 @@ public class BluetoothLeService extends Service {
 
     // for TI
     public void dataParseTI(final int index, final String action, final String data) {
-
-
         if (data != null) {
-            if (data.length() == 44) {
-
-                Intent i = new Intent(action);
-
-
-                String[] ns = data.split(",");
-
-                String realNumberString = "";
-                int j;
-                for (j = 0; j < ns.length; j++) {
-
-
-                    short shortNumber = (short) Integer.parseInt(ns[j], 16);
-
-                    if (j == ns.length - 1) {
-
-                        realNumberString += String.valueOf(shortNumber);
-                    } else {
-
-                        realNumberString += String.valueOf(shortNumber) + ",";
-                    }
-
-                }//end of for
-                String getReadTime = new SimpleDateFormat("HH:mm:ss").format(mGetReadTime[index]);
-                realNumberString = realNumberString + "," + mGetReadCount[index] + "," + getReadTime;
-                i.putExtra(action, realNumberString);
-                sendBroadcast(i);
-
-            } else {
-                String body = action.split("\\.")[0];
-                Intent i = new Intent(body + RECEIVE_DATA_SETTING_IDENTIFIER);
-                i.putExtra(body + RECEIVE_DATA_SETTING_IDENTIFIER, data);
-                sendBroadcast(i);
-            }
+            Intent i = new Intent(action);
+            String[] ns = data.split(",");
+            String realNumberString = "";
+            int j;
+            for (j = 0; j < ns.length; j++) {
+                short shortNumber = (short) Integer.parseInt(ns[j], 16);
+                if (j == ns.length - 1) {
+                    realNumberString += String.valueOf(shortNumber);
+                } else {
+                    realNumberString += String.valueOf(shortNumber) + ",";
+                }
+            }//end of for
+            String getReadTime = new SimpleDateFormat("HH:mm:ss.SSS").format(mGetReadTime[index]);
+            double lossRate = (mSendReadCount[index] - mGetReadCount[index]) * 1.0 / mSendReadCount[index];
+            lossRate = (int) Math.floor(lossRate * 10000) / 10000.0;
+            realNumberString = realNumberString + "," + mGetReadCount[index] + "," + getReadTime + "," + mGetRssi[index] + "," + mSendReadCount[index] + "," + lossRate;
+            i.putExtra(action, realNumberString);
+            sendBroadcast(i);
         }//end of  data != null
     }//end of  dataParse
 
 
     // for ITRI
     public void dataParseITRI(final int index, final String action, final String data, final String emBit, final String power, final String accScale) {
-
-
         if (data != null) {
-            if (data.length() == 44) {
-
-                Intent i = new Intent(action);
-
-
-                String[] ns = data.split(",");
-
-                String realNumberString = "";
-                int j;
-                for (j = 0; j < ns.length; j++) {
-
-
-                    short shortNumber = (short) Integer.parseInt(ns[j], 16);
-
-                    if (j == ns.length - 1) {
-
-                        realNumberString += String.valueOf(shortNumber);
-                    } else {
-
-                        realNumberString += String.valueOf(shortNumber) + ",";
-                    }
-
-                }//end of for
-                String getReadTime = new SimpleDateFormat("HH:mm:ss").format(mGetReadTime[index]);
-                realNumberString = realNumberString + "," + emBit + "," + power + "," + accScale + "," + mGetReadCount[index] + "," + getReadTime;
-                i.putExtra(action, realNumberString);
-                sendBroadcast(i);
-
-            } else {
-                String body = action.split("\\.")[0];
-                Intent i = new Intent(body + RECEIVE_DATA_SETTING_IDENTIFIER);
-                i.putExtra(body + RECEIVE_DATA_SETTING_IDENTIFIER, data);
-                sendBroadcast(i);
-            }
+            Intent i = new Intent(action);
+            String[] ns = data.split(",");
+            String realNumberString = "";
+            int j;
+            for (j = 0; j < ns.length; j++) {
+                short shortNumber = (short) Integer.parseInt(ns[j], 16);
+                if (j == ns.length - 1) {
+                    realNumberString += String.valueOf(shortNumber);
+                } else {
+                    realNumberString += String.valueOf(shortNumber) + ",";
+                }
+            }//end of for
+            String getReadTime = new SimpleDateFormat("HH:mm:ss.SSS").format(mGetReadTime[index]);
+            double lossRate = (mSendReadCount[index] - mGetReadCount[index]) * 1.0 / mSendReadCount[index];
+            lossRate = (int) Math.floor(lossRate * 10000) / 10000.0;
+            realNumberString = realNumberString + "," + emBit + "," + power + "," + accScale + "," + mGetReadCount[index] + "," + getReadTime + "," + mGetRssi[index] + "," + mSendReadCount[index] + "," + lossRate;
+            i.putExtra(action, realNumberString);
+            sendBroadcast(i);
         }//end of  data != null
     }//end of  dataParse
 
@@ -669,9 +599,7 @@ public class BluetoothLeService extends Service {
 
     public void getTISensor(final int index) {
         mSendReadCount[index]++;
-        broadcastUpdate(BODY[index] + ACTION_SENDREAD_COUNT, mSendReadCount[index]+"");
-
-//        delayMS(200);
+        broadcastUpdate(BODY[index] + ACTION_SENDREAD_COUNT, mSendReadCount[index] + "");
         String systemId = "f000aa81-0451-4000-b000-000000000000"; //for TI
         for (int i = 0; i < mGattCharacteristics[index].size(); i++) {
             for (int j = 0; j < mGattCharacteristics[index].get(i).size(); j++) {
@@ -688,8 +616,7 @@ public class BluetoothLeService extends Service {
 
     public void getITRISensor(final int index) {
         mSendReadCount[index]++;
-        broadcastUpdate(BODY[index] + ACTION_SENDREAD_COUNT, mSendReadCount[index]+"");
-//        delayMS(200);
+        broadcastUpdate(BODY[index] + ACTION_SENDREAD_COUNT, mSendReadCount[index] + "");
         String systemId = "0000fff5-0000-1000-8000-00805f9b34fb"; //for ITRI
         for (int i = 0; i < mGattCharacteristics[index].size(); i++) {
             for (int j = 0; j < mGattCharacteristics[index].get(i).size(); j++) {

@@ -192,7 +192,7 @@ public class BluetoothLeService extends Service {
                             startReadTimer(index, type);
                             break;
                         }
-                        case "ITRI": {
+                        case "ITRI30": {
                             setGattCharacteristics(index);
                             startReadTimer(index, type);
                             break;
@@ -653,7 +653,7 @@ public class BluetoothLeService extends Service {
                             getTISensor(index);
                             break;
                         }
-                        case "ITRI": {
+                        case "ITRI30": {
                             getITRISensor(index);
                             break;
                         }

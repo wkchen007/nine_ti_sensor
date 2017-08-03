@@ -299,7 +299,7 @@ public class DeviceControlActivity extends AppCompatActivity {
                     case "TI":
                         bodyAction("readTI", FIRST, rawDataBundle.getString(pBody + RECEIVE_DATA_IDENTIFIER));
                         break;
-                    case "ITRI":
+                    case "ITRI30":
                         bodyAction("readITRI", FIRST, rawDataBundle.getString(pBody + RECEIVE_DATA_IDENTIFIER));
                         break;
                 }
@@ -356,7 +356,7 @@ public class DeviceControlActivity extends AppCompatActivity {
             myOutWriter.write("address: " + mDeviceAddress + "," + "sendReadPeriod (ms): " + mSendReadPeriod + "," + "firstConn: " + show_firstConn.getText() + "\n");
             switch (mDeviceType){
                 case "TI":
-                case "ITRI":
+                case "ITRI30":
                     myOutWriter.write("time,a_x,a_y,a_z,a_xyz,g_x,g_y,g_z,m_x,m_y,m_z,rssi (db),sendCount,lossRate" + "\n");
                     break;
             }
